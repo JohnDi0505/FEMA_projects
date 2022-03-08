@@ -6,15 +6,18 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point, LineString
 
-trajectory_CRS = "3424" # NJ State Plane
+trajectory_CRS = "32618" # NJ State Plane
 
-input_path = "X:/0520-2021/0520-trajectories"
-output_path = "X:/0520-2021/las/airborne_control"
+input_path = "X:/0616-2021/0616-Trajectories"
+output_path = "X:/0616-2021/las/airborne_control"
 airborne_pc_path = "L:/Northeast_NJ_PostSandy_2014/PointCloud_NJ_StatePlane"
 reference_path = "L:/Airborne_lidar_NJSP/Northeast_NJ/Northeast_NJ_postSandy_NJSP_surveyfeet.shp"
 
+if not os.path.isdir(output_path):
+    os.mkdir(output_path)
+
 pc_tiles = gpd.read_file(reference_path)
-#pc_tiles = pc_tiles.to_crs(epsg=trajectory_CRS)
+pc_tiles = pc_tiles.to_crs(epsg=trajectory_CRS)
 
 os.listdir(input_path)
 
@@ -22,13 +25,13 @@ query_log = open(output_path + "/query.log", "w")
 
 Total_trajectory = 0
 for trajectory_file in os.listdir(input_path):
-    if re.search(r'(.+)-NJSPSF.txt', trajectory_file):
+    if re.search(r'(.+)-UTM.txt', trajectory_file):
         Total_trajectory += 1
 
 n = 0
 for trajectory_file in os.listdir(input_path):
-    if re.search(r'(.+)-NJSPSF.txt', trajectory_file):
-        trajectory_title = trajectory_file.replace("-NJSPSF.txt", "")
+    if re.search(r'(.+)-UTM.txt', trajectory_file):
+        trajectory_title = trajectory_file.replace("-UTM.txt", "")
 
         # write .log file title
         query_log.write(trajectory_title + "\n")
